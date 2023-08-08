@@ -8,9 +8,9 @@ username = secrets["AZURE_SQL_USERNAME"]
 password = '{' + secrets["AZURE_SQL_PASSWORD"] + '}'
 
 database = 'YoutubeStats'
-driver= '{ODBC Driver 17 for SQL Server}'
+driver = "{ODBC Driver 17 for SQL Server}"
 
-with pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+password) as conn:
+with pyodbc.connect('DRIVER= '+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+password) as conn:
     with conn.cursor() as cursor:
         cursor.execute("SELECT * FROM dbo.Videos")
         row = cursor.fetchone()

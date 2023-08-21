@@ -2,7 +2,6 @@ import logging
 import azure.functions as func
 import os
 import requests
-import pyodbc
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:

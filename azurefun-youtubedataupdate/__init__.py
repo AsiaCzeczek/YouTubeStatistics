@@ -1,9 +1,8 @@
 import logging
 import azure.functions as func
-from dotenv import dotenv_values
+import os
 
-secrets = dotenv_values(".env")
-secret_val = secrets["SECRET_1"]
+secret_val = str(os.environ["SECRET_1"])
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')

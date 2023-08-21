@@ -1,25 +1,19 @@
 import logging
 import azure.functions as func
 import os
-
-my_secret = os.environ["AZURE_SQL_SERVER"]
+from YouTubeScript import update_db
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
+    logging.info('Python HTTP trigger function update DB request.')
 
-    name = req.params.get('name')
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
+    api_key = os.environ["YOUTUBE_DATA_API_KEY"]
+    server = os.environ["AZURE_SQL_SERVER"]
+    username = os.environ["AZURE_SQL_USERNAME"]
+    password = '{' + os.environ["AZURE_SQL_PASSWORD"] + '}'
 
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
-    else:
-        return func.HttpResponse(
-             "This is kitek!" + my_secret,
+    update_db(api_key, server, username, password)
+
+    return func.HttpResponse(
+             "DB updated",
              status_code=200
         )

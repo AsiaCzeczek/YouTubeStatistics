@@ -1,11 +1,7 @@
 import requests
 import pyodbc
-from dotenv import dotenv_values
 
-secrets = dotenv_values(".env")
-
-
-def get_name_and_likes_of_most_popular_video(country_code, api_key):
+def get_name_and_likes_of_most_popular_video(api_key, country_code):
     request_url = (f"https://www.googleapis.com/youtube/v3/videos?part=id,statistics,snippet,contentDetails,"
                    f"liveStreamingDetails,localizations,player,recordingDetails,status,"
                    f"topicDetails&chart=mostPopular&regionCode={country_code}&maxResults=1&key={api_key}")
@@ -30,18 +26,10 @@ def save_data_to_db(conn, name, likes):
             cursor.execute(sql, name, likes)
 
         conn2.commit()
-        
 
-country_code = "PL"
-api_key = secrets["YOUTUBE_DATA_API_KEY"]
-
-name, likes = get_name_and_likes_of_most_popular_video(country_code, api_key)
-
-
-server = secrets["AZURE_SQL_SERVER"]
-username = secrets["AZURE_SQL_USERNAME"]
-password = '{' + secrets["AZURE_SQL_PASSWORD"] + '}'
-database = 'YoutubeStats'
-
-conn = get_db_connection(server, database, username, password)
-save_data_to_db(conn, name, likes)
+def update_db(api_key, server, username, password):
+    database = 'YoutubeStats'
+    country_code = "PL"
+    name, likes = get_name_and_likes_of_most_popular_video(api_key, country_code)
+    conn = get_db_connection(server, database, username, password)
+    save_data_to_db(conn, name, likes)

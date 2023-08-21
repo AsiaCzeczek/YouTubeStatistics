@@ -1,7 +1,6 @@
 import logging
 import azure.functions as func
 import os
-import requests
 from . import youtube_script
 
 

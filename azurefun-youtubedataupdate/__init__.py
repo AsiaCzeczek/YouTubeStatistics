@@ -13,12 +13,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     username = os.environ["AZURE_SQL_USERNAME"]
     password = '{' + os.environ["AZURE_SQL_PASSWORD"] + '}'
 
-    update_db(api_key, server, username, password)
+    try:
+        update_db(api_key, server, username, password)
+    except Exception as error
+        return func.HttpResponse(str(error), status_code=500) 
 
-    return func.HttpResponse(
-             "DB updated",
-             status_code=200
-        )
+    return func.HttpResponse("DB updated", status_code=200)
 
 def get_name_and_likes_of_most_popular_video(api_key, country_code):
     request_url = (f"https://www.googleapis.com/youtube/v3/videos?part=id,statistics,snippet,contentDetails,"
@@ -35,7 +35,7 @@ def get_name_and_likes_of_most_popular_video(api_key, country_code):
 
 def get_db_connection(server, database, username, password):
     return pyodbc.connect(
-            'DRIVER= {ODBC Driver 17 for SQL Server};SERVER=tcp:' + server + ';PORT=1433;DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+            'DRIVER= {ODBC Driver 18 for SQL Server};SERVER=tcp:' + server + ';PORT=1433;DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
 
 
 def save_data_to_db(conn, name, likes):

@@ -1,7 +1,7 @@
 import logging
 import azure.functions as func
 import os
-from azurefun-youtubedataupdate import youtube_script
+from .youtube_script import update_db
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function update DB request.')
@@ -11,7 +11,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     username = os.environ["AZURE_SQL_USERNAME"]
     password = '{' + os.environ["AZURE_SQL_PASSWORD"] + '}'
 
-    youtube_script.update_db(api_key, server, username, password)
+    update_db(api_key, server, username, password)
 
     return func.HttpResponse(
              "DB updated",

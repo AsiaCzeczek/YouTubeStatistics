@@ -15,7 +15,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     try:
         update_db(api_key, server, username, password)
-    except Exception as error
+    except Exception as error:
         return func.HttpResponse(str(error), status_code=500) 
 
     return func.HttpResponse("DB updated", status_code=200)

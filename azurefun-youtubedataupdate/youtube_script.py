@@ -16,7 +16,7 @@ def get_name_and_likes_of_most_popular_video(api_key, country_code):
 
 def get_db_connection(server, database, username, password):
     return pyodbc.connect(
-            'DRIVER= {ODBC Driver 17 for SQL Server};SERVER=tcp:' + server + ';PORT=1433;DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+            'DRIVER={ODBC Driver 17 for SQL Server};SERVER=tcp:' + server + ';PORT=1433;DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
 
 
 def save_data_to_db(conn, name, likes):

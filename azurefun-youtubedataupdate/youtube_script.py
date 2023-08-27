@@ -1,17 +1,15 @@
 import requests
 import pyodbc
+from . import youtube_requests
 
-def get_name_and_likes_of_most_popular_video(api_key, country_code):
-    request_url = (f"https://www.googleapis.com/youtube/v3/videos?part=id,statistics,snippet,contentDetails,"
-                   f"liveStreamingDetails,localizations,player,recordingDetails,status,"
-                   f"topicDetails&chart=mostPopular&regionCode={country_code}&maxResults=1&key={api_key}")
-    http_response = requests.get(request_url)
+
+def get_youtube_response(api_key, country_code, base_request, map_response):
+    request = f"https://www.googleapis.com/youtube/v3/{base_request}&regionCode={country_code}&key={api_key}"
+    http_response = requests.get(request)
     if http_response.status_code == 429:
         raise Exception("Temp-Banned due to excess requests, please wait and continue later")
     response = http_response.json()
-    name = response["items"][0]["snippet"]["title"]
-    likes = response["items"][0]["statistics"]["likeCount"]
-    return name, likes
+    return map_response(response)
 
 
 def get_db_connection(server, database, username, password):
@@ -19,17 +17,22 @@ def get_db_connection(server, database, username, password):
             'DRIVER={ODBC Driver 17 for SQL Server};SERVER=tcp:' + server + ';PORT=1433;DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
 
 
-def save_data_to_db(conn, name, likes):
+def save_data_to_db(conn, response_dicts):
     with conn as conn2:
         with conn2.cursor() as cursor:
-            sql = "insert into Videos (Name, Likes) values (?, ?)"
-            cursor.execute(sql, name, likes)
-
+            table_name = response_dicts[0]['TableName']
+            columns = [key for key in list(response_dicts[0].keys())[1:]]
+            columns_str = ", ".join(columns)
+            values_questionmark_str = ", ".join(["?" for col in columns])
+            sql = f"insert into {table_name} ({columns_str}) values ({values_questionmark_str})"
+            for dict in response_dicts:
+                cursor.execute(sql, list(dict.values())[1:])
         conn2.commit()
+
 
 def update_db(api_key, server, username, password):
     database = 'YoutubeStats'
     country_code = "PL"
-    name, likes = get_name_and_likes_of_most_popular_video(api_key, country_code)
+    response_dicts = get_youtube_response(api_key, country_code, youtube_requests.videos_request(1), youtube_requests.videos_dictionaries)
     conn = get_db_connection(server, database, username, password)
-    save_data_to_db(conn, name, likes)
+    save_data_to_db(conn, response_dicts)

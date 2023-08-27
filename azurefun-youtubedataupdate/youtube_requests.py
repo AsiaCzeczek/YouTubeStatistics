@@ -6,6 +6,6 @@ def videos_request(videos_count):
 def videos_dictionaries(response):
     return [{ 
             'TableName': 'Videos',
-            'Name': response["items"][0]["snippet"]["title"],
+            'Name': response["items"][0]["snippet"]["title"][:50],
             'Likes': response["items"][0]["statistics"]["likeCount"]
         }]

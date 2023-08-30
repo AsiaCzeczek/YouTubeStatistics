@@ -8,11 +8,6 @@ CREATE TABLE Video (
     CategoryId varchar(255)
 );
 
-CREATE TABLE Tag (
-    Id bigint IDENTITY(1, 1) NOT NULL primary key,
-    TagName nvarchar(100) NOT NULL UNIQUE
-)
-
 CREATE TABLE VideoStatistic (
     Id bigint IDENTITY(1, 1) NOT NULL primary key,
     VideoId varchar(255) NOT NULL,

@@ -69,8 +69,6 @@ def update_db(api_key, server, username, password):
 
     videos_response = get_youtube_response(api_key, country_code, max_results, youtube_videos.videos_request)
     videos_rows = youtube_videos.videos_rows(videos_response)
-    tags_rows = youtube_videos.tags_rows(videos_response)
     statistic_rows = youtube_videos.statistic_rows(videos_response, current_datetime)
     insert_or_update_rows(conn, videos_rows, "VideoId")
-    insert_or_update_rows(conn, tags_rows, "TagName")
     insert_rows(conn, statistic_rows)

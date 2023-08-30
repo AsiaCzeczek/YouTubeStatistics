@@ -17,16 +17,6 @@ def videos_rows(videos_response):
         } 
         for item in videos_response['items']]
 
-def tags_rows(videos_response):
-    tags = [tag for item in videos_response['items'] for tag in (item['snippet']['tags'] if 'tags' in item['snippet'] else [])]
-    unique_tags = set(tags)
-    return [
-        {
-            TABLE_NAME: 'Tag',
-            'TagName': tag
-        }
-        for tag in unique_tags]
-
 def statistic_rows(videos_response, datetime):
     return [
         {

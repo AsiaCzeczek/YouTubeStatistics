@@ -14,7 +14,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     try:
         youtube_script.update_db(api_key, server, username, password)
+        logging.info("Update correct.")
     except Exception as error:
+        logging.error("Update error.")
         return func.HttpResponse(str(error), status_code=500) 
 
     return func.HttpResponse("DB updated", status_code=200)

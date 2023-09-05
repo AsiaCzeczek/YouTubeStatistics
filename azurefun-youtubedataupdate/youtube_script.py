@@ -2,11 +2,12 @@ import requests
 import pyodbc
 from datetime import datetime
 from . import youtube_videos
-# import youtube_videos
+from . import youtube_channels
+#import youtube_videos
+#import youtube_channels
 
-# odpytujemy API Youtuba wysyłając odpowiednio stworzony requsest i zwracamy odpowiedz w formacie json
-def get_youtube_json_response(api_key, country_code, max_results, base_request):
-    request = f"https://www.googleapis.com/youtube/v3/{base_request}&maxResults={max_results}&regionCode={country_code}&key={api_key}"
+# odpytujemy API Youtuba wysyłając przekazany requsest w argumencie i zwracamy odpowiedz w formacie json
+def get_youtube_json_response(request):
     http_response = requests.get(request)
     if http_response.status_code == 429:
         raise Exception("Temp-Banned due to excess requests, please wait and continue later")
@@ -66,10 +67,20 @@ def update_db(api_key, server, username, password):
     current_datetime = datetime.now()
 
     with get_db_connection(server, database, username, password) as conn:
-        videos_json_response = get_youtube_json_response(api_key, country_code, max_results, youtube_videos.videos_request)
+        videos_request = youtube_videos.videos_request(max_results, country_code, api_key)
+        videos_json_response = get_youtube_json_response(videos_request)
         videos_rows = youtube_videos.videos_rows(videos_json_response)
         statistic_rows = youtube_videos.statistic_rows(videos_json_response, current_datetime)
+
+        channels_id = [x['ChannelId'] for x in videos_rows]
+        unique_channels_ids = list(set(channels_id))
+        channels_request = youtube_channels.channels_request(unique_channels_ids, max_results, api_key)
+        channels_json_response = get_youtube_json_response(channels_request)
+        channels_rows = youtube_channels.channels_rows(channels_json_response)
+        channels_statistic_rows = youtube_channels.channels_statistic_rows(channels_json_response, current_datetime)
+
+        insert_or_update_rows(conn, channels_rows, "ChannelId")
+        insert_rows(conn, channels_statistic_rows)
+
         insert_or_update_rows(conn, videos_rows, "VideoId")
         insert_rows(conn, statistic_rows)
-
-

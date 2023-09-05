@@ -5,7 +5,14 @@ CREATE TABLE Video (
     ChannelId varchar(255),
     Title nvarchar(100) NOT NULL,
     Tags nvarchar(500),
-    CategoryId varchar(255)
+    CategoryId varchar(255),
+    DefaultLanguage varchar(50),
+    DurationInMin smallint,
+    HdOrSd varchar(2),
+    HasCaption bit,
+    IsLicensed bit,
+    IsEmbeddable bit,
+    IsForKids bit,
 );
 
 CREATE TABLE VideoStatistic (

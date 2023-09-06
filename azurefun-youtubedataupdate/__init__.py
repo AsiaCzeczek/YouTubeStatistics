@@ -16,4 +16,5 @@ def main(myTimer: func.TimerRequest) -> None:
         youtube_script.update_db(api_key, server, username, password)
         logging.info("Update correct.")
     except Exception as error:
-        logging.error("Update error.")
+        logging.error(f'Update error. {str(error)}')
+        raise

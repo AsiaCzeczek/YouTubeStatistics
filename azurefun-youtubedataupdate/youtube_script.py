@@ -60,7 +60,7 @@ def insert_rows(conn, rows):
 
 def update_db_for_country(api_key, server, username, password, country_code):
     database = 'YoutubeStats'
-    max_results = 10
+    max_results = 30
 
     videos_request = youtube_videos.videos_request(max_results, country_code, api_key)
     current_datetime = datetime.now()

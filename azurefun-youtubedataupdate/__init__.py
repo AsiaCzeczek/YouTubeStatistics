@@ -4,8 +4,8 @@ import os
 from . import youtube_script
 
 
-def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function update DB request.')
+def main(myTimer: func.TimerRequest) -> None:
+    logging.info(f'Start db update with timer {"delayed" if myTimer.past_due else "on time"}.')
 
     api_key = os.environ["YOUTUBE_DATA_API_KEY"]
     server = os.environ["AZURE_SQL_SERVER"]
@@ -17,7 +17,3 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         logging.info("Update correct.")
     except Exception as error:
         logging.error("Update error.")
-        return func.HttpResponse(str(error), status_code=500)
-
-    return func.HttpResponse("DB updated", status_code=200)
-

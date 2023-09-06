@@ -42,7 +42,6 @@ def insert_or_update_rows(conn, rows, compare_column_name):
                 cursor.execute(update_sql, values_to_save + [comapre_column_value])
             else:
                 cursor.execute(insert_sql, values_to_save)
-    conn.commit()
 
 
 def insert_rows(conn, rows):
@@ -57,33 +56,34 @@ def insert_rows(conn, rows):
         for row in rows:
             values_to_save = list(row.values())[1:]
             cursor.execute(insert_sql, values_to_save)
-    conn.commit()
 
 
 def update_db_for_country(api_key, server, username, password, country_code):
     database = 'YoutubeStats'
     max_results = 10
 
+    videos_request = youtube_videos.videos_request(max_results, country_code, api_key)
+    current_datetime = datetime.now()
+    videos_json_response = get_youtube_json_response(videos_request)
+    videos_rows = youtube_videos.videos_rows(videos_json_response)
+    statistic_rows = youtube_videos.statistic_rows(videos_json_response, current_datetime, country_code)
+
+    channels_id = [x['ChannelId'] for x in videos_rows]
+    unique_channels_ids = list(set(channels_id))
+    channels_request = youtube_channels.channels_request(unique_channels_ids, max_results, api_key)
+    current_datetime = datetime.now()
+    channels_json_response = get_youtube_json_response(channels_request)
+    channels_rows = youtube_channels.channels_rows(channels_json_response)
+    channels_statistic_rows = youtube_channels.channels_statistic_rows(channels_json_response, current_datetime)
+
     with get_db_connection(server, database, username, password) as conn:
-        videos_request = youtube_videos.videos_request(max_results, country_code, api_key)
-        current_datetime = datetime.now()
-        videos_json_response = get_youtube_json_response(videos_request)
-        videos_rows = youtube_videos.videos_rows(videos_json_response)
-        statistic_rows = youtube_videos.statistic_rows(videos_json_response, current_datetime, country_code)
-
-        channels_id = [x['ChannelId'] for x in videos_rows]
-        unique_channels_ids = list(set(channels_id))
-        channels_request = youtube_channels.channels_request(unique_channels_ids, max_results, api_key)
-        current_datetime = datetime.now()
-        channels_json_response = get_youtube_json_response(channels_request)
-        channels_rows = youtube_channels.channels_rows(channels_json_response)
-        channels_statistic_rows = youtube_channels.channels_statistic_rows(channels_json_response, current_datetime)
-
         insert_or_update_rows(conn, channels_rows, "ChannelId")
         insert_rows(conn, channels_statistic_rows)
 
         insert_or_update_rows(conn, videos_rows, "VideoId")
         insert_rows(conn, statistic_rows)
+
+        conn.commit()
 
 
 def update_db(api_key, server, username, password):

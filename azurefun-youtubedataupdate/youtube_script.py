@@ -68,7 +68,7 @@ def update_db_for_country(api_key, server, username, password, country_code):
     videos_rows = youtube_videos.videos_rows(videos_json_response)
     statistic_rows = youtube_videos.statistic_rows(videos_json_response, current_datetime, country_code)
 
-    channels_id = [x['ChannelId'] for x in videos_rows]
+    channels_id = filter(lambda row: row is not None, [x['ChannelId'] for x in videos_rows])
     unique_channels_ids = list(set(channels_id))
     channels_request = youtube_channels.channels_request(unique_channels_ids, max_results, api_key)
     current_datetime = datetime.now()
@@ -90,5 +90,3 @@ def update_db(api_key, server, username, password):
     countries = ['PL', 'US']
     for country in countries:
         update_db_for_country(api_key, server, username, password, country)
-
-

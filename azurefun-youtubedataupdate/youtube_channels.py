@@ -24,10 +24,10 @@ def channels_statistic_rows(channels_response, datetime):
             'TableName': 'ChannelStatistic',
             'ChannelId': item['id'],
             'Datetime': datetime,
-            'ViewCount': item['statistics']['viewCount'],
+            'ViewCount': item['statistics']['viewCount'] if 'viewCount' in item['statistics'] else None,
             'CommentCount': item['statistics']['commentCount'] if 'commentCount' in item['statistics'] else None,
-            'SubscriberCount': item['statistics']['subscriberCount'],
-            'VideoCount': item['statistics']['videoCount']
+            'SubscriberCount': item['statistics']['subscriberCount'] if 'subscriberCount' in item['statistics'] else None,
+            'VideoCount': item['statistics']['videoCount'] if 'videoCount' in item['statistics'] else None
         }
         for item in channels_response['items']]
     

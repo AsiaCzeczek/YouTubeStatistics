@@ -11,16 +11,16 @@ def videos_rows(videos_response):
             'TableName': 'Video',
             'VideoId': item['id'],
             'PublishDate': item['snippet']['publishedAt'],
-            'ChannelId': item['snippet']['channelId'],
+            'ChannelId': item['snippet']['channelId'] if 'channelId' in item['snippet'] else None,
             'Title': item['snippet']['title'],
             'Tags': ",".join(item['snippet']['tags']) if 'tags' in item['snippet'] else None,
-            'CategoryId': item['snippet']['categoryId'],
+            'CategoryId': item['snippet']['categoryId'] if 'categoryId' in item['snippet'] else None,
             'DefaultLanguage': item['snippet']['defaultLanguage'] if 'defaultLanguage' in item['snippet'] else None,
             'DurationInMin': convert_to_minutes(item['contentDetails']['duration']),
-            'HdOrSd': item['contentDetails']['definition'],
-            'HasCaption': item['contentDetails']['caption'],
-            'IsLicensed': item['contentDetails']['licensedContent'],
-            'IsEmbeddable': item['status']['embeddable'],
+            'HdOrSd': item['contentDetails']['definition'] if 'definition' in item['contentDetails'] else None,
+            'HasCaption': item['contentDetails']['caption'] if 'caption' in item['contentDetails'] else None,
+            'IsLicensed': item['contentDetails']['licensedContent'] if 'licensedContent' in item['contentDetails'] else None,
+            'IsEmbeddable': item['status']['embeddable'] if 'embeddable' in item['status'] else None,
             'IsForKids': item['status']['madeForKids'] if 'madeForKids' in item['status'] else None
         }
         for item in videos_response['items']]
@@ -32,10 +32,10 @@ def statistic_rows(videos_response, datetime, country_code):
             'TableName': 'VideoStatistic',
             'VideoId': item['id'],
             'Datetime': datetime,
-            'ViewCount': item['statistics']['viewCount'],
-            'LikeCount': item['statistics']['likeCount'],
-            'FavoriteCount': item['statistics']['favoriteCount'],
-            'CommentCount': item['statistics']['commentCount'],
+            'ViewCount': item['statistics']['viewCount'] if 'viewCount' in item['statistics'] else None,
+            'LikeCount': item['statistics']['likeCount'] if 'likeCount' in item['statistics'] else None,
+            'FavoriteCount': item['statistics']['favoriteCount'] if 'favoriteCount' in item['statistics'] else None,
+            'CommentCount': item['statistics']['commentCount'] if 'commentCount' in item['statistics'] else None,
             'StatisticInCountry': country_code
         }
         for item in videos_response['items']]   

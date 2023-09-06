@@ -26,7 +26,7 @@ def videos_rows(videos_response):
         for item in videos_response['items']]
 
 
-def statistic_rows(videos_response, datetime):
+def statistic_rows(videos_response, datetime, country_code):
     return [
         {
             'TableName': 'VideoStatistic',
@@ -35,7 +35,8 @@ def statistic_rows(videos_response, datetime):
             'ViewCount': item['statistics']['viewCount'],
             'LikeCount': item['statistics']['likeCount'],
             'FavoriteCount': item['statistics']['favoriteCount'],
-            'CommentCount': item['statistics']['commentCount']
+            'CommentCount': item['statistics']['commentCount'],
+            'StatisticInCountry': country_code
         }
         for item in videos_response['items']]   
     

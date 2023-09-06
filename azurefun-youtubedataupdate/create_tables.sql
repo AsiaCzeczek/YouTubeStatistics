@@ -1,3 +1,5 @@
+BEGIN TRANSACTION;
+
 CREATE TABLE Channel (
     Id bigint IDENTITY(1, 1) NOT NULL primary key,
     ChannelId varchar(255) NOT NULL UNIQUE,
@@ -16,7 +18,7 @@ CREATE TABLE ChannelStatistic (
     CommentCount bigint,
     SubscriberCount bigint NOT NULL,
     VideoCount int NOT NULL,
-    CONSTRAINT FK_ChannelStatistic_Channel FOREIGN KEY (ChannelId) REFERENCES Chanel (ChannelId)
+    CONSTRAINT FK_ChannelStatistic_Channel FOREIGN KEY (ChannelId) REFERENCES Channel (ChannelId)
 )
 
 CREATE TABLE Video (
@@ -34,7 +36,7 @@ CREATE TABLE Video (
     IsLicensed bit NOT NULL,
     IsEmbeddable bit NOT NULL,
     IsForKids bit,
-    CONSTRAINT FK_Video_Channel FOREIGN KEY (ChannelId) REFERENCES Chanel (ChannelId)
+    CONSTRAINT FK_Video_Channel FOREIGN KEY (ChannelId) REFERENCES Channel (ChannelId)
 );
 
 CREATE TABLE VideoStatistic (
@@ -45,5 +47,8 @@ CREATE TABLE VideoStatistic (
     LikeCount bigint NOT NULL,
     FavoriteCount bigint NOT NULL,
     CommentCount bigint NOT NULL,
+    StatisticInCountry varchar(50),
     CONSTRAINT FK_VideoStatistic_Video FOREIGN KEY (VideoId) REFERENCES Video (VideoId)
 )
+
+COMMIT;

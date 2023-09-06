@@ -6,7 +6,7 @@ from . import youtube_channels
 #import youtube_videos
 #import youtube_channels
 
-# odpytujemy API Youtuba wysyłając przekazany requsest w argumencie i zwracamy odpowiedz w formacie json
+
 def get_youtube_json_response(request):
     http_response = requests.get(request)
     if http_response.status_code == 429:
@@ -60,21 +60,21 @@ def insert_rows(conn, rows):
     conn.commit()
 
 
-def update_db(api_key, server, username, password):
+def update_db_for_country(api_key, server, username, password, country_code):
     database = 'YoutubeStats'
-    country_code = "PL"
     max_results = 10
-    current_datetime = datetime.now()
 
     with get_db_connection(server, database, username, password) as conn:
         videos_request = youtube_videos.videos_request(max_results, country_code, api_key)
+        current_datetime = datetime.now()
         videos_json_response = get_youtube_json_response(videos_request)
         videos_rows = youtube_videos.videos_rows(videos_json_response)
-        statistic_rows = youtube_videos.statistic_rows(videos_json_response, current_datetime)
+        statistic_rows = youtube_videos.statistic_rows(videos_json_response, current_datetime, country_code)
 
         channels_id = [x['ChannelId'] for x in videos_rows]
         unique_channels_ids = list(set(channels_id))
         channels_request = youtube_channels.channels_request(unique_channels_ids, max_results, api_key)
+        current_datetime = datetime.now()
         channels_json_response = get_youtube_json_response(channels_request)
         channels_rows = youtube_channels.channels_rows(channels_json_response)
         channels_statistic_rows = youtube_channels.channels_statistic_rows(channels_json_response, current_datetime)
@@ -84,3 +84,11 @@ def update_db(api_key, server, username, password):
 
         insert_or_update_rows(conn, videos_rows, "VideoId")
         insert_rows(conn, statistic_rows)
+
+
+def update_db(api_key, server, username, password):
+    countries = ['PL', 'US']
+    for country in countries:
+        update_db_for_country(api_key, server, username, password, country)
+
+

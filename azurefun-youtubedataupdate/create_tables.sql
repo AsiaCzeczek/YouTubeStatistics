@@ -36,7 +36,7 @@ CREATE TABLE Video (
     IsLicensed bit,
     IsEmbeddable bit,
     IsForKids bit,
-    Rank smallint,
+    CountryRank smallint,
     CONSTRAINT FK_Video_Channel FOREIGN KEY (ChannelId) REFERENCES Channel (ChannelId)
 );
 

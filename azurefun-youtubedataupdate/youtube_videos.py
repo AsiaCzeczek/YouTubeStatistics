@@ -36,9 +36,10 @@ def statistic_rows(videos_response, datetime, country_code):
             'LikeCount': item['statistics']['likeCount'] if 'likeCount' in item['statistics'] else None,
             'FavoriteCount': item['statistics']['favoriteCount'] if 'favoriteCount' in item['statistics'] else None,
             'CommentCount': item['statistics']['commentCount'] if 'commentCount' in item['statistics'] else None,
-            'StatisticInCountry': country_code
+            'StatisticInCountry': country_code,
+            'Rank': i + 1
         }
-        for item in videos_response['items']]   
+        for i, item in enumerate(videos_response['items'])]   
     
 
 def convert_to_minutes(you_tube_duration):

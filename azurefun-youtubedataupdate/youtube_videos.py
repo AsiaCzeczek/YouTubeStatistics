@@ -37,7 +37,7 @@ def statistic_rows(videos_response, datetime, country_code):
             'FavoriteCount': item['statistics']['favoriteCount'] if 'favoriteCount' in item['statistics'] else None,
             'CommentCount': item['statistics']['commentCount'] if 'commentCount' in item['statistics'] else None,
             'StatisticInCountry': country_code,
-            'Rank': i + 1
+            'CountryRank': i + 1
         }
         for i, item in enumerate(videos_response['items'])]   
     

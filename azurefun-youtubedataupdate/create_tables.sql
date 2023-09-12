@@ -3,7 +3,7 @@ BEGIN TRANSACTION;
 CREATE TABLE Channel (
     Id bigint IDENTITY(1, 1) NOT NULL primary key,
     ChannelId varchar(255) NOT NULL UNIQUE,
-    Title nvarchar(100) NOT NULL,
+    Title nvarchar(500) NOT NULL,
     CreatedDate datetime2 NOT NULL,
     DefaultLanguage varchar(50),
     Country varchar(50),
@@ -26,7 +26,7 @@ CREATE TABLE Video (
     VideoId varchar(255) NOT NULL UNIQUE,
     PublishDate datetime2 NOT NULL,
     ChannelId varchar(255),
-    Title nvarchar(100) NOT NULL,
+    Title nvarchar(500) NOT NULL,
     Tags nvarchar(500),
     CategoryId varchar(255),
     DefaultLanguage varchar(50),

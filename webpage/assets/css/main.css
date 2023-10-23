@@ -152,6 +152,7 @@
 
 	p {
 		margin: 0 0 2rem 0;
+		letter-spacing: 2.26667px;
 	}
 
 	h1, h2, h3, h4, h5, h6 {
@@ -175,8 +176,9 @@
 			width: -webkit-max-content;
 			width: -ms-max-content;
 			width: max-content;
+			margin: auto;
 			padding-bottom: 0.5rem;
-			margin: 0 0 2rem 0;
+			text-align: center;
 		}
 
 	h1 {
@@ -1263,7 +1265,7 @@
 
 			#header .content p {
 				letter-spacing: 0.2rem;
-				font-size: 0.8rem;
+				font-size: 1rem;
 				line-height: 2;
 			}
 
@@ -1275,17 +1277,20 @@
 			margin-bottom: 0;
 			list-style: none;
 			padding-left: 0;
-			border: solid 1px #ffffff;
+			border: solid 5px #686869;
 			border-radius: 4px;
 		}
 
 			#header nav ul li {
+				width: 450px;
+				text-align: center;
 				padding-left: 0;
-				border-left: solid 1px #ffffff;
+				border-left: solid 2.5px #686869;
 			}
 
 				#header nav ul li:first-child {
 					border-left: 0;
+					border-right: solid 2.5px #686869;
 				}
 
 				#header nav ul li a {
@@ -1296,7 +1301,7 @@
 					padding: 0 1.25rem 0 1.45rem;
 					text-transform: uppercase;
 					letter-spacing: 0.2rem;
-					font-size: 0.8rem;
+					font-size: 1rem;
 					border-bottom: 0;
 				}
 
@@ -1314,13 +1319,13 @@
 			position: absolute;
 			top: 0;
 			left: calc(50% - 1px);
-			width: 1px;
+			width: 0px;
 			height: 100%;
 			background: #ffffff;
 		}
 
 		#header nav.use-middle ul li.is-middle {
-			border-left: 0;
+			border-left: solid 5px #686869;
 		}
 
 		body.is-article-visible #header {
@@ -1462,6 +1467,7 @@
 		flex-direction: column;
 		position: relative;
 		max-width: 100%;
+		width: 1150;
 		z-index: 3;
 	}
 
@@ -1476,9 +1482,9 @@
 			transition: opacity 0.325s ease-in-out, transform 0.325s ease-in-out;
 			padding: 4.5rem 2.5rem 1.5rem 2.5rem ;
 			position: relative;
-			width: 40rem;
+			width: 72rem;
 			max-width: 100%;
-			background-color: rgba(27, 31, 34, 0.85);
+			background-color: rgba(44, 47, 53, 1);
 			border-radius: 4px;
 			opacity: 0;
 		}
@@ -1558,6 +1564,12 @@
 	.bodylist {
 		letter-spacing: 0.2rem;
 		font-size: 0.8rem;
+		line-height: 2;
+	}
+
+	.articlelist {
+		letter-spacing: 2.26667px;
+		font-size: rem;
 		line-height: 2;
 	}
 	
